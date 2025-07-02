@@ -1,0 +1,31 @@
+# Node.js dependencies
+node_modules/
+dist
+
+# Environment variables
+.env
+backend/.env
+
+# Build outputs
+dist/
+build/
+.vite/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE specific files
+.vscode/
+.idea/
+
+# Other
+*.sqlite
+*.sqlite3
+*.db
