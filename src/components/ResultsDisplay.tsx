@@ -97,13 +97,7 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results, onNewFi
         try {
             const maliciousResults = results.filter(result => result.status === 'malicious');
             if (maliciousResults.length === 0) {
-                // Using a custom modal/message box instead of alert()
-                // For simplicity, we'll log to console, but in a real app,
-                // you'd render a temporary message or a modal dialog.
                 console.warn('No malicious IP addresses found to download.');
-                // Example of a simple temporary message (requires state in ResultsDisplay)
-                // setInfoMessage('No malicious IP addresses found to download.');
-                // setTimeout(() => setInfoMessage(null), 3000);
                 return;
             }
             await generatePDFReport(maliciousResults, 'Malicious IPs Report');
@@ -121,7 +115,6 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results, onNewFi
 
     const maliciousCount = results.filter(r => r.status === 'malicious').length;
 
-    // --- NEW PAGINATION LOGIC ---
     const getPageNumbers = () => {
         const pageNumbers = [];
         const halfMaxButtons = Math.floor(maxPageButtons / 2);
@@ -129,7 +122,6 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results, onNewFi
         let startPage = Math.max(1, currentPage - halfMaxButtons);
         let endPage = Math.min(totalPages, currentPage + halfMaxButtons);
 
-        // Adjust start/end to ensure maxPageButtons are always shown if possible
         if (totalPages > maxPageButtons) {
             if (endPage - startPage + 1 < maxPageButtons) {
                 if (currentPage <= halfMaxButtons) {
@@ -140,12 +132,9 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results, onNewFi
             }
         }
 
-        // Ensure startPage doesn't go below 1
         startPage = Math.max(1, startPage);
-        // Ensure endPage doesn't exceed totalPages
         endPage = Math.min(totalPages, endPage);
 
-        // Add first page and ellipsis if necessary
         if (startPage > 1) {
             pageNumbers.push(1);
             if (startPage > 2) {
@@ -153,12 +142,10 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results, onNewFi
             }
         }
 
-        // Add pages in the calculated range
         for (let i = startPage; i <= endPage; i++) {
             pageNumbers.push(i);
         }
 
-        // Add ellipsis and last page if necessary
         if (endPage < totalPages) {
             if (endPage < totalPages - 1) {
                 pageNumbers.push('...');
@@ -168,7 +155,6 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results, onNewFi
 
         return pageNumbers;
     };
-    // --- END NEW PAGINATION LOGIC ---
 
     return (
         <div className="p-6 space-y-6">
@@ -242,7 +228,9 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results, onNewFi
                             setFilterStatus(e.target.value);
                             setCurrentPage(1); // Reset to first page on filter change
                         }}
-                        className="pl-10 pr-8 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none"
+                        // Apply specific styling for the select and its options
+                        className="pl-10 pr-8 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none
+                                   [&_option]:bg-slate-700 [&_option]:text-white [&_option]:hover:bg-slate-600"
                     >
                         <option value="all">All Status</option>
                         <option value="safe">Safe</option>
@@ -344,7 +332,7 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results, onNewFi
 
             {/* Pagination */}
             {totalPages > 1 && (
-                <div className="flex items-center justify-between flex-wrap gap-4"> {/* Added flex-wrap and gap */}
+                <div className="flex items-center justify-between flex-wrap gap-4">
                     <p className="text-blue-200 text-sm">
                         Showing {startIndex + 1} to {Math.min(startIndex + itemsPerPage, filteredResults.length)} of {filteredResults.length} results
                     </p>
